@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+tAddress = {
+    'tIndex': 'web\\index.html',
+}
+
+def index(request):
+    return render(request, tAddress['tIndex'], {})
