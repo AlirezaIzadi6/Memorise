@@ -16,7 +16,7 @@ class Flashcard(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.name
+        return self.question
 
 class Holder(models.Model):
     learned = models.IntegerField(default=0)
@@ -26,5 +26,5 @@ class Holder(models.Model):
     flashcard = models.ForeignKey(Flashcard, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.user
+        return self.flashcard.question + ' for ' + self.user.username
 
