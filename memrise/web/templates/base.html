@@ -4,7 +4,11 @@
 <body>
 {% block usermenu %}
 <h2>ناحیه کاربری</h2>
+{% if user.is_authenticated %}
 <p>خوش آمدید {{ user }}</p>
+{% else %}
+<p>شما وارد نشده اید. برای ورود <a href='{% url 'admin:index' %}'>اینجا کلیک کنید.</a></p>
+{% endif %}
 {% endblock %}
 
 {% block contents %}{% endblock %}
