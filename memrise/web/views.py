@@ -5,4 +5,6 @@ tAddress = {
 }
 
 def index(request):
-    return render(request, tAddress['tIndex'], {})
+    user = request.user
+    context = {'user': user}
+    return render(request, tAddress['tIndex'], context)

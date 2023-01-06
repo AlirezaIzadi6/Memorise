@@ -2,7 +2,10 @@
 <head><title>{% block title %}{% endblock %}</title></head>
 
 <body>
-{% block usermenu %}{% endblock %}
+{% block usermenu %}
+<h2>ناحیه کاربری</h2>
+<p>خوش آمدید {{ user }}</p>
+{% endblock %}
 
 {% block contents %}{% endblock %}
 
