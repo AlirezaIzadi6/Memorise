@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ deck.title }}{% endblock %}
+
+{% block contents %}
+<h1>{{ deck.title }}</h1>
+<table>
+<tr><th>سوال</th><th>جواب</th><th>توضیح</th></tr>
+{% if cards %}
+{% for c in cards %}
+<tr><td>{{ c.question }}</td><td>{{ c.answer }}</td><td>{{ c.description }}</td></tr>
+{% endfor %}
+{% else %}
+<tr>این مجموعه حاوی هیچ کارتی نیست.</tr>
+{% endif %}
+</table>
+{% endblock %}

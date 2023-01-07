@@ -8,7 +8,7 @@
 <tr><th>عنوان</th><th>توضیح</th></tr>
 {% if decks %}
 {% for d in decks %}
-<tr><td>{{ d.title }}</td><td>{{ d.description }}</td></tr>
+<tr><td><a href='{% url 'showdeck' d.id %}'>{{ d.title }}</a></td><td>{{ d.description }}</td></tr>
 {% endfor %}
 {% else %}
 <tr>مجموعه‌ای برای نمایش وجود ندارد.</tr>

@@ -6,6 +6,7 @@ tAddress = {
     'tIndex': 'web\\index.html',
     'tShowdecks': 'web\\showdecks.html',
     'tError_login': 'web\\error_login.html',
+    'tShowdeck': 'web\\showdeck.html',
 }
 
 def index(request):
@@ -20,3 +21,9 @@ def showdecks(request):
         return render(request, tAddress['tShowdecks'], context)
     else:
         return render(request, tAddress['tError_login'], {})
+
+def showdeck(request, d_id):
+    deck = Deck.objects.get(id=d_id)
+    cards = Flashcard.objects.filter(deck=deck)
+    context = {'deck': deck, 'cards': cards}
+    return render(request, tAddress['tShowdeck'], context)
