@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}اضافه کردن فلش‌کارت به {{ deck.name }}{% endblock %}
+
+{% block contents %}
+<form action='{% url 'submitbatchflashcard' deck.id %}' method='POST'>
+{% csrf_token %}
+<h1>اضافه کردن گروهی فلش‌کارت</h1>
+<p>هر بخش را با کاما جدا کنید و هر کارت را در یک خط بنویسید.</p>
+<textarea name='data' id='data'></textarea>
+<input type='submit' value='ذخیره'>
+</form>
+{% endblock %}
