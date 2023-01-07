@@ -6,10 +6,10 @@ from .models import *
 
 tAddress = {
     'tIndex': 'web\\index.html',
-    'tShowdecks': 'web\\showdecks.html',
-    'tError_login': 'web\\error_login.html',
-    'tShowdeck': 'web\\showdeck.html',
-    'tAddbatchflashcard': 'web\\addbatchflashcard.html',
+    'tShowdecks': 'web\\show-decks.html',
+    'tError_login': 'web\\error-login.html',
+    'tShowdeck': 'web\\deck-show.html',
+    'tAddbatchflashcard': 'web\\flashcard-add.html',
 }
 
 def index(request):
