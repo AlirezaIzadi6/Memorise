@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}مجموعه‌های شما{% endblock %}
+
+{% block contents %}
+<h1>مجموعه‌های شما</h1>
+<table>
+<tr><th>عنوان</th><th>توضیح</th></tr>
+{% if decks %}
+{% for d in decks %}
+<tr><td>{{ d.title }}</td><td>{{ d.description }}</td></tr>
+{% endfor %}
+{% else %}
+<tr>مجموعه‌ای برای نمایش وجود ندارد.</tr>
+{% endif %}
+</table>
+{% endblock %}
