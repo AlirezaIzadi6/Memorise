@@ -12,6 +12,17 @@
 {% endif %}
 {% endblock %}
 
+{% block messageview %}
+{% if messages %}
+<h4>پیام</h4>
+<ul style='list-style-type:none'>
+{% for message in messages %}
+<li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
 {% block contents %}{% endblock %}
 
 <scripts>
