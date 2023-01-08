@@ -15,6 +15,12 @@ class Deck(models.Model):
     
     def getNumOfLearners(self):
         return len(User.objects.filter(deck=self))
+    
+    def getNumOfCardsToReview(self, user):
+        holders = Holder.objects.filter(flashcard__deck=self, user=user, learned=2)
+        for h in holders:
+            h.update()
+        return len(Holder.objects.filter(flashcard__deck=self, user=user, NeedToReview=True))
 
 class Flashcard(models.Model):
     question = models.CharField(max_length=63)
@@ -39,3 +45,4 @@ class Holder(models.Model):
     
     def update(self):
         self.NeedToReview = True if timezone.now() > self.TimeToReview else False
+        self.save()

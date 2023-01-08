@@ -3,12 +3,13 @@
 {% block title %}مجموعه‌های شما{% endblock %}
 
 {% block contents %}
+{% load MyTags %}
 <h1>مجموعه‌های شما</h1>
 <table>
-<tr> <th>عنوان</th> <th>تعداد کارتها</th> <th>مشترکها</th> <th>توضیح</th> </tr>
+<tr> <th>عنوان</th> <th>تعداد کارتها</th> <th>نیازمند مرور</th> <th>مشترکها</th> <th>توضیح</th> </tr>
 {% if decks %}
 {% for d in decks %}
-<tr> <td><a href='{% url 'showdeck' d.id %}'>{{ d.title }}</a></td> <td>{{ d.getNumOfCards }}</td> <td>{{ d.getNumOfLearners }}</td> <td>{{ d.description }}</td> </tr>
+<tr> <td><a href='{% url 'showdeck' d.id %}'>{{ d.title }}</a></td> <td>{{ d.getNumOfCards }}</td> <td>{{ d|getNumOfCardsToReview:user }}</td> <td>{{ d.getNumOfLearners }}</td> <td>{{ d.description }}</td> </tr>
 {% endfor %}
 {% else %}
 <tr>مجموعه‌ای برای نمایش وجود ندارد.</tr>
