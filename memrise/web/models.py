@@ -25,7 +25,7 @@ class Deck(models.Model):
 class Flashcard(models.Model):
     question = models.CharField(max_length=63)
     answer = models.CharField(max_length=63)
-    description = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=255, default='', blank=True)
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
     
     def __str__(self):
