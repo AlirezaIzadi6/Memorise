@@ -8,6 +8,12 @@ class Deck(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def getNumOfCards(self):
+        return len(Flashcard.objects.filter(deck=self))
+    
+    def getNumOfLearners(self):
+        return len(User.objects.filter(deck=self))
 
 class Flashcard(models.Model):
     question = models.CharField(max_length=63)
