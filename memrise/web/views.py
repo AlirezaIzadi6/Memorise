@@ -14,14 +14,14 @@ tAddress = {
 
 def index(request):
     user = request.user
-    context = {'user': user, 'messages': request.session['messages']}
+    context = {'user': user, 'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tIndex'], context)
 
 def showdecks(request):
     if request.user.is_authenticated:
         decks = Deck.objects.filter(users=request.user)
-        context = {'decks': decks, 'messages': request.session['messages']}
+        context = {'decks': decks, 'messages': request.session.get('messages')}
         request.session['messages'] = []
         return render(request, tAddress['tShowdecks'], context)
     else:
@@ -30,13 +30,13 @@ def showdecks(request):
 def showdeck(request, d_id):
     deck = Deck.objects.get(id=d_id)
     cards = Flashcard.objects.filter(deck=deck)
-    context = {'deck': deck, 'cards': cards, 'messages': request.session['messages']}
+    context = {'deck': deck, 'cards': cards, 'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tShowdeck'], context)
 
 def addbatchflashcard(request, d_id):
     deck = Deck.objects.get(id=d_id)
-    context = {'deck': deck, 'messages': request.session['messages']}
+    context = {'deck': deck, 'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tAddbatchflashcard'], context)
 
