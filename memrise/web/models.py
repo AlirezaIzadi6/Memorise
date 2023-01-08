@@ -28,6 +28,7 @@ class Holder(models.Model):
     learned = models.IntegerField(default=0)
     NumOfReviews = models.IntegerField(default=0)
     LastReview = models.DateTimeField(null=True, blank=True)
+    TimeToReview = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flashcard = models.ForeignKey(Flashcard, on_delete=models.CASCADE)
     
