@@ -39,6 +39,14 @@ def pickdeck(request, d_id):
         request.session['messages'] = ['با موفقیت به مجموعه های شما اضافه شد.']
     return HttpResponseRedirect(reverse('showdeck', args=(d_id,)))
 
+def quitdeck(request, d_id):
+    deck = Deck.objects.get(id=d_id)
+    user = request.user
+    if len(Deck.objects.filter(users=user)) > 0:
+        deck.users.remove(user)
+        request.session['messages'] = ['با موفقیت از لیست مجموعه های شما پاک شد.']
+    return HttpResponseRedirect(reverse('showdeck', args=(d_id,)))
+
 def showdeck(request, d_id):
     deck = Deck.objects.get(id=d_id)
     cards = Flashcard.objects.filter(deck=deck)

@@ -16,11 +16,16 @@
 </table>
 {% if not registered %}
 <button onclick='GoToAdd()'>اضافه کردن این مجموعه</button>
+{% else %}
+<button onclick='GoToQuit()'>خروج از این مجموعه</button>
 {% endif %}
 {% endblock %}
 
 {% block scripts %}
 function GoToAdd() {
 location.href = '{% url 'pickdeck' deck.id %}';
+}
+function GoToQuit() {
+location.href = '{% url 'quitdeck' deck.id %}';
 }
 {% endblock %}
