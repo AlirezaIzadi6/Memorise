@@ -27,10 +27,25 @@ def showdecks(request):
     else:
         return render(request, tAddress['tError_login'], {})
 
+def pickdeck(request, d_id):
+    deck = Deck.objects.get(id=d_id)
+    user = request.user
+    if len(Deck.objects.filter(users=user)) == 0:
+        deck.users.add(user)
+        cards = Flashcard.objects.filter(deck=deck)
+        for c in cards:
+            h = Holder(flashcard=c, user=user)
+            h.save()
+        request.session['messages'] = ['با موفقیت به مجموعه های شما اضافه شد.']
+    return HttpResponseRedirect(reverse('showdeck', args=(d_id,)))
+
 def showdeck(request, d_id):
     deck = Deck.objects.get(id=d_id)
     cards = Flashcard.objects.filter(deck=deck)
-    context = {'deck': deck, 'cards': cards, 'messages': request.session.get('messages')}
+    registered = False
+    if len(Deck.objects.filter(users=request.user)):
+        registered = True
+    context = {'deck': deck, 'cards': cards, 'registered': registered, 'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tShowdeck'], context)
 

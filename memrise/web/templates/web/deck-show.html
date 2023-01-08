@@ -14,4 +14,13 @@
 <tr>این مجموعه حاوی هیچ کارتی نیست.</tr>
 {% endif %}
 </table>
+{% if not registered %}
+<button onclick='GoToAdd()'>اضافه کردن این مجموعه</button>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+function GoToAdd() {
+location.href = '{% url 'pickdeck' deck.id %}';
+}
 {% endblock %}
