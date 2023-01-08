@@ -21,6 +21,10 @@ class Deck(models.Model):
         for h in holders:
             h.update()
         return len(Holder.objects.filter(flashcard__deck=self, user=user, NeedToReview=True))
+    
+    def makeLearnQuestions(self, user):
+        holders = Holder.objects.filter(flashcard__deck=self, user=user, learned__lte=1)
+        return len(holders)
 
 class Flashcard(models.Model):
     question = models.CharField(max_length=63)
@@ -30,6 +34,16 @@ class Flashcard(models.Model):
     
     def __str__(self):
         return self.question
+    
+    def make_question(self, qtype): # qtype = question type (multiple choice, typing, etc)
+        result = {'question': self.question, 'answer': self.answer}
+        if qtype == 1:
+            result['type'] = 'QToA'
+        elif qtype == 2:
+            result['type'] = 'AToQ'
+        elif qtype == 3:
+            result['type'] = 'writing'
+        return result
 
 class Holder(models.Model):
     learned = models.IntegerField(default=0)
