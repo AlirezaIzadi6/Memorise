@@ -45,10 +45,12 @@ def submitbatchflashcard(request, d_id):
     data = request.POST['data'].split('\n')
     counter = 0
     for d in data:
-        parsed = d.split(',')
-        if len(parsed) < 3:
+        parsed = d.split('^^') if len(d.split('^^')) > 1 else d.split('\t')
+        if len(parsed) < 2:
             continue
-        card = Flashcard(deck=deck, question=parsed[0], answer=parsed[1], description=parsed[2])
+        card = Flashcard(deck=deck, question=parsed[0], answer=parsed[1])
+        if len(parsed) > 2:
+            card.description = parsed[2]
         card.save()
         counter += 1
     if request.POST['data'] == '':
