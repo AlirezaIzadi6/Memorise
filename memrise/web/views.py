@@ -30,7 +30,7 @@ def showmydecks(request):
         decks = Deck.objects.filter(users=request.user)
         context = {'decks': decks, 'messages': request.session.get('messages')}
         request.session['messages'] = []
-        return render(request, tAddress['tShowdecks'], context)
+        return render(request, tAddress['tShowmydecks'], context)
     else:
         return render(request, tAddress['tError_login'], {})
 
