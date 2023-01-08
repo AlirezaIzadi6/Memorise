@@ -35,7 +35,7 @@ class Flashcard(models.Model):
     def __str__(self):
         return self.question
     
-    def make_question(self, qtype): # qtype = question type (multiple choice, typing, etc)
+    def makeQuestion(self, qtype): # qtype = question type (multiple choice, typing, etc)
         result = {'question': self.question, 'answer': self.answer}
         if qtype == 1:
             result['type'] = 'QToA'
