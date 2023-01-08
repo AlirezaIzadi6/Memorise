@@ -6,7 +6,8 @@ from .models import *
 
 tAddress = {
     'tIndex': 'web\\index.html',
-    'tShowdecks': 'web\\show-decks.html',
+    'tShowdecks': 'web\\decks-show.html',
+    'tShowmydecks': 'web\\my-decks-show.html',
     'tError_login': 'web\\error-login.html',
     'tShowdeck': 'web\\deck-show.html',
     'tAddbatchflashcard': 'web\\flashcard-add.html',
@@ -19,6 +20,12 @@ def index(request):
     return render(request, tAddress['tIndex'], context)
 
 def showdecks(request):
+    decks = Deck.objects.all()
+    NumOfDecks = len(decks)
+    context = {'decks': decks, 'NumOfDecks': NumOfDecks, 'messages': request.session.get('messages')}
+    return render(request, tAddress['tShowdecks'], context)
+
+def showmydecks(request):
     if request.user.is_authenticated:
         decks = Deck.objects.filter(users=request.user)
         context = {'decks': decks, 'messages': request.session.get('messages')}

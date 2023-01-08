@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}فهرست مجموعه ها{% endblock %}
+
+{% block contents %}
+<h1>فهرست مجموعه‌ها</h1>
+<p>هم اکنون می‌توانید فهرست {{ NumOfDecks }} مجموعه را در این صفحه ببینید.</p>
+<ul style='list-style-type:none'>
+{% for d in decks %}
+<li>
+<h4><a href='{% url 'showdeck' d.id %}'>{{ d.title }}</a></h4>
+<p>تعداد کلمات: {{ d.getNumOfCards }}</p>
+<p>تعداد مشترکین: {{ d.getNumOfLearners }}</p>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}
