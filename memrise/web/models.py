@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Deck(models.Model):
     title = models.CharField(max_length=63)
@@ -29,9 +30,12 @@ class Holder(models.Model):
     NumOfReviews = models.IntegerField(default=0)
     LastReview = models.DateTimeField(null=True, blank=True)
     TimeToReview = models.DateTimeField(null=True, blank=True)
+    NeedToReview = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flashcard = models.ForeignKey(Flashcard, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.flashcard.question + ' for ' + self.user.username
-
+    
+    def update(self):
+        self.NeedToReview = True if timezone.now() > self.TimeToReview else False
