@@ -15,7 +15,7 @@ tAddress = {
 
 def index(request):
     user = request.user
-    context = {'user': user, 'messages': request.session.get('messages')}
+    context = {'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tIndex'], context)
 
@@ -58,7 +58,7 @@ def showdeck(request, d_id):
     deck = Deck.objects.get(id=d_id)
     cards = Flashcard.objects.filter(deck=deck)
     registered = False
-    if len(Deck.objects.filter(users=request.user)):
+    if request.user.is_authenticated and len(Deck.objects.filter(users=request.user)):
         registered = True
     context = {'deck': deck, 'cards': cards, 'registered': registered, 'messages': request.session.get('messages')}
     request.session['messages'] = []
