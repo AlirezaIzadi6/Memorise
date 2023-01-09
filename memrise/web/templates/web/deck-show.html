@@ -14,7 +14,9 @@
 <tr>این مجموعه حاوی هیچ کارتی نیست.</tr>
 {% endif %}
 </table>
-{% if not registered %}
+{% if not user.is_authenticated %}
+<p>برای اضافه کردن این مجموعه باید <a href='{% url 'admin:index' %}'>وارد شوید.</a></p>
+{% elif not registered %}
 <button onclick='GoToAdd()'>اضافه کردن این مجموعه</button>
 {% else %}
 <button onclick='GoToQuit()'>خروج از این مجموعه</button>
