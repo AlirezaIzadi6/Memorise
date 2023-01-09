@@ -37,6 +37,8 @@ def showmydecks(request):
 def pickdeck(request, d_id):
     deck = Deck.objects.get(id=d_id)
     user = request.user
+    if not user.is_authenticated:
+        return render(request, tAddress['tError_login'], {})
     if len(Deck.objects.filter(users=user)) == 0:
         deck.users.add(user)
         cards = Flashcard.objects.filter(deck=deck)
