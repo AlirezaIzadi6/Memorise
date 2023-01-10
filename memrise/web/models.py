@@ -23,8 +23,26 @@ class Deck(models.Model):
         return len(Holder.objects.filter(flashcard__deck=self, user=user, NeedToReview=True))
     
     def makeLearnQuestions(self, user):
-        holders = Holder.objects.filter(flashcard__deck=self, user=user, learned__lte=1)
-        return len(holders)
+        l0holders = Holder.objects.filter(flashcard__deck=self, user=user, learned=0)
+        l1holders = Holder.objects.filter(flashcard__deck=self, user=user, learned=1)
+        if len(l1holders) >= 5:
+            cards = l1holders[:5]
+        elif len(l0holders) >= 5:
+            cards = l1holders[:] + l0holders[:5-len(l1holders)]
+        else:
+            cards = l1holders[:] + l0holders[:]
+        questions = []
+        for c in cards:
+            if c.learned == 1:
+                questions.append(c.flashcard.makeQuestion(2))
+                questions.append(c.flashcard.makeQuestion(3))
+                questions.append(c.flashcard.makeQuestion(3))
+            else:
+                questions.append(c.flashcard.makeQuestion(0))
+                questions.append(c.flashcard.makeQuestion(1))
+                questions.append(c.flashcard.makeQuestion(2))
+                questions.append(c.flashcard.makeQuestion(2))
+        return questions
 
 class Flashcard(models.Model):
     question = models.CharField(max_length=63)
@@ -36,13 +54,15 @@ class Flashcard(models.Model):
         return self.question
     
     def makeQuestion(self, qtype): # qtype = question type (multiple choice, typing, etc)
-        result = {'question': self.question, 'answer': self.answer}
-        if qtype == 1:
-            result['type'] = 'QToA'
+        result = {}
+        if qtype == 0:
+            result = {'question': self.question, 'answer': self.answer, 'description': self.description, 'type': 'learn'}
+        elif qtype == 1:
+            result = {'question': self.question, 'answer': self.answer, 'type': 'QToA'}
         elif qtype == 2:
-            result['type'] = 'AToQ'
+            result = {'question': self.answer, 'answer': self.question, 'type': 'AToQ'}
         elif qtype == 3:
-            result['type'] = 'writing'
+            result = {'question': self.question, 'answer': self.answer, 'type': 'Writing'}
         return result
 
 class Holder(models.Model):
