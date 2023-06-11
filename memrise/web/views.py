@@ -1,8 +1,11 @@
+'''
+functions to manage contents that will be sent to urls will be put here.
+'''
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-from .models import *
+from .models import Deck, Flashcard, Holder
 
 tAddress = {
     'tIndex': 'web\\index.html',
@@ -14,25 +17,33 @@ tAddress = {
 }
 
 def index(request):
-    user = request.user
+    '''
+    simply return the index page.
+    '''
     context = {'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tIndex'], context)
 
 def showdecks(request):
+    '''
+    return all decks in the database in a page.
+    '''
     decks = Deck.objects.all()
-    NumOfDecks = len(decks)
-    context = {'decks': decks, 'NumOfDecks': NumOfDecks, 'messages': request.session.get('messages')}
+    num_of_decks = len(decks)
+    context = {'decks': decks, 'NumOfDecks': num_of_decks,
+        'messages': request.session.get('messages')}
     return render(request, tAddress['tShowdecks'], context)
 
 def showmydecks(request):
-    if request.user.is_authenticated:
-        decks = Deck.objects.filter(users=request.user)
-        context = {'decks': decks, 'messages': request.session.get('messages')}
-        request.session['messages'] = []
-        return render(request, tAddress['tShowmydecks'], context)
-    else:
+    '''
+    return only the decks that current user has picked up. else return error_login page.
+    '''
+    if not request.user.is_authenticated:
         return render(request, tAddress['tError_login'], {})
+    decks = Deck.objects.filter(users=request.user)
+    context = {'decks': decks, 'messages': request.session.get('messages')}
+    request.session['messages'] = []
+    return render(request, tAddress['tShowmydecks'], context)
 
 def pickdeck(request, d_id):
     deck = Deck.objects.get(id=d_id)
@@ -42,9 +53,9 @@ def pickdeck(request, d_id):
     if len(Deck.objects.filter(users=user)) == 0:
         deck.users.add(user)
         cards = Flashcard.objects.filter(deck=deck)
-        for c in cards:
-            h = Holder(flashcard=c, user=user)
-            h.save()
+        for card in cards:
+            holder = Holder(flashcard=card, user=user)
+            holder.save()
         request.session['messages'] = ['با موفقیت به مجموعه های شما اضافه شد.']
     return HttpResponseRedirect(reverse('showdeck', args=(d_id,)))
 
@@ -62,7 +73,8 @@ def showdeck(request, d_id):
     registered = False
     if request.user.is_authenticated and len(Deck.objects.filter(users=request.user)):
         registered = True
-    context = {'deck': deck, 'cards': cards, 'registered': registered, 'messages': request.session.get('messages')}
+    context = {'deck': deck, 'cards': cards,
+        'registered': registered, 'messages': request.session.get('messages')}
     request.session['messages'] = []
     return render(request, tAddress['tShowdeck'], context)
 
@@ -74,10 +86,10 @@ def addbatchflashcard(request, d_id):
 
 def submitbatchflashcard(request, d_id):
     deck = Deck.objects.get(id=d_id)
-    data = request.POST['data'].split('\n')
+    lines = request.POST['data'].split('\n')
     counter = 0
-    for d in data:
-        parsed = d.split('^^') if len(d.split('^^')) > 1 else d.split('\t')
+    for line in lines:
+        parsed = line.split('^^') if len(line.split('^^')) > 1 else line.split('\t')
         if len(parsed) < 2:
             continue
         card = Flashcard(deck=deck, question=parsed[0], answer=parsed[1])
@@ -86,9 +98,14 @@ def submitbatchflashcard(request, d_id):
         card.save()
         counter += 1
     if request.POST['data'] == '':
-        request.session['messages'] = ['ورودی از سمت شما ارسال نشده و هیچ کارتی به مجموعه اضافه نشد.']
+        request.session['messages'] = [
+            'ورودی از سمت شما ارسال نشده و هیچ کارتی به مجموعه اضافه نشد.']
     elif counter == 0:
-        request.session['messages'] = ['هیچ کارتی به مجموعه اضافه نشد. بعد از چک کردن ورودی دوباره تلاش کنید.']
+        request.session['messages'] = [
+            'هیچ کارتی به مجموعه اضافه نشد. بعد از چک کردن ورودی دوباره تلاش کنید.']
     else:
-        request.session['messages'] = ['از ' + str(len(data)) + ' ورودی ارسال شده ' + str(counter) + ' کارت با موفقیت اضافه شد.']
+        request.session['messages'] = [
+            'از ' + str(len(lines)) +
+            ' ورودی ارسال شده ' + str(counter) +
+            ' کارت با موفقیت اضافه شد.']
     return HttpResponseRedirect(reverse('showdeck', args=(deck.id,)))
